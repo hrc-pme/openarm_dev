@@ -1,1 +1,0 @@
-/root/projects/ros2_ws/src/openarm_ros2/openarm_hardware/include/openarm_hardware/v10_simple_hardware.hpp

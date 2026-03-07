@@ -1,1 +1,0 @@
-/root/projects/build/openarm_hardware/ament_cmake_core/openarm_hardwareConfig-version.cmake

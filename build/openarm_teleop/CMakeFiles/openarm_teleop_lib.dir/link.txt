@@ -1,2 +1,0 @@
-/usr/bin/ar qc libopenarm_teleop_lib.a CMakeFiles/openarm_teleop_lib.dir/src/controller/dynamics.cpp.o CMakeFiles/openarm_teleop_lib.dir/src/controller/control.cpp.o CMakeFiles/openarm_teleop_lib.dir/src/openarm_port/openarm_init.cpp.o CMakeFiles/openarm_teleop_lib.dir/src/openarm_port/joint_mapper.cpp.o
-/usr/bin/ranlib libopenarm_teleop_lib.a
