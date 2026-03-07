@@ -1,0 +1,18 @@
+[  7%] [32mBuilding CXX object CMakeFiles/openarm_teleop_lib.dir/src/openarm_port/openarm_init.cpp.o[0m
+[ 15%] [32mBuilding CXX object CMakeFiles/openarm_teleop_lib.dir/src/controller/dynamics.cpp.o[0m
+[ 23%] [32mBuilding CXX object CMakeFiles/openarm_teleop_lib.dir/src/controller/control.cpp.o[0m
+[ 30%] [32mBuilding CXX object CMakeFiles/openarm_teleop_lib.dir/src/openarm_port/joint_mapper.cpp.o[0m
+[ 38%] [32m[1mLinking CXX static library libopenarm_teleop_lib.a[0m
+[ 38%] Built target openarm_teleop_lib
+[ 61%] [32mBuilding CXX object CMakeFiles/gravity_comp.dir/control/gravity_compasation.cpp.o[0m
+[ 61%] [32mBuilding CXX object CMakeFiles/unilateral_control.dir/control/openarm_unilateral_control.cpp.o[0m
+[ 61%] [32mBuilding CXX object CMakeFiles/comm_test.dir/control/openarm_communication_test.cpp.o[0m
+[ 69%] [32mBuilding CXX object CMakeFiles/bilateral_control.dir/control/openarm_bilateral_control.cpp.o[0m
+[ 76%] [32m[1mLinking CXX executable comm_test[0m
+[ 76%] Built target comm_test
+[ 84%] [32m[1mLinking CXX executable gravity_comp[0m
+[ 84%] Built target gravity_comp
+[ 92%] [32m[1mLinking CXX executable unilateral_control[0m
+[100%] [32m[1mLinking CXX executable bilateral_control[0m
+[100%] Built target unilateral_control
+[100%] Built target bilateral_control

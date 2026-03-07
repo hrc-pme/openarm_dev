@@ -1,0 +1,39 @@
+[0.019s] Invoking command in '/root/projects/build/openarm_can': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/projects/ros2_ws/install/realsense2_ros_mqtt_bridge:/opt/ros/humble PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake --build /root/projects/build/openarm_can -- -j10 -l10
+[0.152s] [ 62%] Built target openarm_can
+[0.152s] [ 75%] Built target openarm-can-motor-check
+[0.152s] [ 87%] Built target openarm-can-diagnosis
+[0.152s] [100%] Built target openarm-can-demo
+[0.159s] Invoked command in '/root/projects/build/openarm_can' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/projects/ros2_ws/install/realsense2_ros_mqtt_bridge:/opt/ros/humble PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake --build /root/projects/build/openarm_can -- -j10 -l10
+[0.160s] Invoking command in '/root/projects/build/openarm_can': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/projects/ros2_ws/install/realsense2_ros_mqtt_bridge:/opt/ros/humble PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake --install /root/projects/build/openarm_can
+[0.170s] -- Install configuration: ""
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/lib/libopenarm_can.a
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/damiao_motor
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/damiao_motor/dm_motor_device_collection.hpp
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/damiao_motor/dm_motor_control.hpp
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/damiao_motor/dm_motor_constants.hpp
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/damiao_motor/dm_motor.hpp
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/damiao_motor/dm_motor_device.hpp
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/canbus
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/canbus/can_device_collection.hpp
+[0.170s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/canbus/can_socket.hpp
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/canbus/can_device.hpp
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/can
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/can/socket
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/can/socket/arm_component.hpp
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/can/socket/openarm.hpp
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/include/openarm/can/socket/gripper_component.hpp
+[0.171s] -- Up-to-date: /root/projects/install/openarm_can/lib/cmake/OpenArmCAN/OpenArmCANTargets.cmake
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/lib/cmake/OpenArmCAN/OpenArmCANTargets-noconfig.cmake
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/lib/cmake/OpenArmCAN/OpenArmCANConfig.cmake
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/lib/cmake/OpenArmCAN/OpenArmCANConfigVersion.cmake
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/lib/pkgconfig/openarm-can.pc
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-motor-check
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-diagnosis
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-demo
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-change-baudrate
+[0.172s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-configure-socketcan
+[0.173s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-configure-socketcan-4-arms
+[0.173s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-set-zero
+[0.173s] -- Up-to-date: /root/projects/install/openarm_can/bin/openarm-can-zero-position-calibration
+[0.173s] Invoked command in '/root/projects/build/openarm_can' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/projects/ros2_ws/install/realsense2_ros_mqtt_bridge:/opt/ros/humble PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake --install /root/projects/build/openarm_can

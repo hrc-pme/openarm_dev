@@ -1,0 +1,16 @@
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/config/rviz_rgbd_plugin_settings.yaml
+/root/projects/install/realsense2_rviz_plugin/share/ament_index/resource_index/package_run_dependencies/realsense2_rviz_plugin
+/root/projects/install/realsense2_rviz_plugin/share/ament_index/resource_index/parent_prefix_path/realsense2_rviz_plugin
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/environment/ament_prefix_path.sh
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/environment/ament_prefix_path.dsv
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/environment/path.sh
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/environment/path.dsv
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/local_setup.bash
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/local_setup.sh
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/local_setup.zsh
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/local_setup.dsv
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/package.dsv
+/root/projects/install/realsense2_rviz_plugin/share/ament_index/resource_index/packages/realsense2_rviz_plugin
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/cmake/realsense2_rviz_pluginConfig.cmake
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/cmake/realsense2_rviz_pluginConfig-version.cmake
+/root/projects/install/realsense2_rviz_plugin/share/realsense2_rviz_plugin/package.xml

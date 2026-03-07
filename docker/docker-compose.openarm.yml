@@ -1,0 +1,38 @@
+services:
+  openarm_dev:
+    build:
+      context: .
+      dockerfile: dockerfile.openarm
+      args:
+        USERNAME: root
+    image: openarm-dev
+    container_name: openarm-dev
+    # Network host mode is strongly recommended for ROS 2 to avoid DDS issues
+    network_mode: host
+    ipc: host
+    pid: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - TZ=Asia/Taipei
+      # NVIDIA GPU Configuration
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      # Mount X11 socket for GUI applications (e.g., rviz2)
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # Mount the entire projects folder from host to container for local development
+      # The user has structured everything cleanly inside projects/
+      - ../:/root/projects
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+    stdin_open: true
+    tty: true
+    # Working directory is set to the user home directory as requested
+    working_dir: /root
+    command: /bin/bash

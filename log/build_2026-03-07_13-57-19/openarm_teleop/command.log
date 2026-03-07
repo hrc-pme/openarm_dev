@@ -1,0 +1,1 @@
+Invoking command in '/root/projects/build/openarm_teleop': PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake /root/projects/ros2_ws/src/openarm_teleop -DCMAKE_INSTALL_PREFIX=/root/projects/install/openarm_teleop

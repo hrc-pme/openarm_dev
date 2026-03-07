@@ -1,0 +1,33 @@
+[0.009s] Invoking command in '/root/projects/build/realsense2_camera': AMENT_PREFIX_PATH=/root/projects/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/root/projects/install/realsense2_camera_msgs:/root/projects/ros2_ws/install/realsense2_rviz_plugin:/root/projects/ros2_ws/install/openarm_bimanual_moveit_config:/root/projects/ros2_ws/install/openarm:/root/projects/ros2_ws/install/openarm_description:/root/projects/ros2_ws/install/realsense2_description:/root/projects/ros2_ws/install/realsense2_camera_msgs:/root/projects/ros2_ws/install/openarm_hardware:/root/projects/ros2_ws/install/openarm_can:/root/projects/ros2_ws/install/openarm_bringup:/root/projects/install/openarm_can:/root/projects/install/openarm_bringup:/root/projects/ros2_ws/install/realsense2_ros_mqtt_bridge:/opt/ros/humble LD_LIBRARY_PATH=/root/projects/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PROMPT_COMMAND=history -a; history -n; PYTHONPATH=/root/projects/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /root/projects/build/realsense2_camera -- -j10 -l10
+[0.041s] Consolidate compiler generated dependencies of target gtest_main
+[0.042s] Consolidate compiler generated dependencies of target gtest
+[0.042s] Consolidate compiler generated dependencies of target realsense2_camera_node
+[0.073s] [ 15%] Built target gtest
+[0.073s] [ 15%] Built target gtest_main
+[0.073s] Consolidate compiler generated dependencies of target realsense2_camera
+[0.073s] [ 23%] Built target realsense2_camera_node
+[0.073s] Consolidate compiler generated dependencies of target gtest_template
+[0.073s] [ 26%] Building CXX object CMakeFiles/realsense2_camera.dir/src/realsense_node_factory.cpp.o
+[0.073s] [ 30%] Building CXX object CMakeFiles/realsense2_camera.dir/src/parameters.cpp.o
+[0.073s] [ 38%] Built target gtest_template
+[0.073s] [ 42%] Building CXX object CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o
+[0.073s] [ 46%] Building CXX object CMakeFiles/realsense2_camera.dir/src/rs_node_setup.cpp.o
+[0.076s] [ 50%] Building CXX object CMakeFiles/realsense2_camera.dir/src/ros_utils.cpp.o
+[0.080s] [ 53%] Building CXX object CMakeFiles/realsense2_camera.dir/src/ros_sensor.cpp.o
+[0.085s] [ 57%] Building CXX object CMakeFiles/realsense2_camera.dir/src/dynamic_params.cpp.o
+[0.097s] [ 61%] Building CXX object CMakeFiles/realsense2_camera.dir/src/pointcloud_filter.cpp.o
+[0.097s] [ 65%] Building CXX object CMakeFiles/realsense2_camera.dir/src/sensor_params.cpp.o
+[0.101s] [ 69%] Building CXX object CMakeFiles/realsense2_camera.dir/src/named_filter.cpp.o
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:76: CMakeFiles/realsense2_camera.dir/src/realsense_node_factory.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:104: CMakeFiles/realsense2_camera.dir/src/parameters.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:118: CMakeFiles/realsense2_camera.dir/src/rs_node_setup.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:160: CMakeFiles/realsense2_camera.dir/src/dynamic_params.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:174: CMakeFiles/realsense2_camera.dir/src/sensor_params.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:146: CMakeFiles/realsense2_camera.dir/src/ros_utils.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:188: CMakeFiles/realsense2_camera.dir/src/named_filter.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:202: CMakeFiles/realsense2_camera.dir/src/pointcloud_filter.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:132: CMakeFiles/realsense2_camera.dir/src/ros_sensor.cpp.o] Interrupt
+[2.038s] gmake[2]: *** [CMakeFiles/realsense2_camera.dir/build.make:90: CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o] Interrupt
+[2.038s] gmake[1]: *** [CMakeFiles/Makefile2:159: CMakeFiles/realsense2_camera.dir/all] Interrupt
+[2.039s] gmake: *** [Makefile:146: all] Interrupt
+[2.073s] Invoked command in '/root/projects/build/realsense2_camera' returned '-2': AMENT_PREFIX_PATH=/root/projects/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/root/projects/install/realsense2_camera_msgs:/root/projects/ros2_ws/install/realsense2_rviz_plugin:/root/projects/ros2_ws/install/openarm_bimanual_moveit_config:/root/projects/ros2_ws/install/openarm:/root/projects/ros2_ws/install/openarm_description:/root/projects/ros2_ws/install/realsense2_description:/root/projects/ros2_ws/install/realsense2_camera_msgs:/root/projects/ros2_ws/install/openarm_hardware:/root/projects/ros2_ws/install/openarm_can:/root/projects/ros2_ws/install/openarm_bringup:/root/projects/install/openarm_can:/root/projects/install/openarm_bringup:/root/projects/ros2_ws/install/realsense2_ros_mqtt_bridge:/opt/ros/humble LD_LIBRARY_PATH=/root/projects/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PROMPT_COMMAND=history -a; history -n; PYTHONPATH=/root/projects/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /root/projects/build/realsense2_camera -- -j10 -l10

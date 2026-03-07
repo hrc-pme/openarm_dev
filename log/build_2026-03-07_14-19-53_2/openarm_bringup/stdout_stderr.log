@@ -1,0 +1,22 @@
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/launch/openarm.bimanual.launch.py
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/launch/openarm.launch.py
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/config/v10_controllers/openarm_v10_bimanual_controllers.yaml
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/config/v10_controllers/openarm_v10_bimanual_controllers_namespaced.yaml
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/config/v10_controllers/openarm_v10_controllers.yaml
+-- Symlinking: /root/projects/install/openarm_bringup/share/ament_index/resource_index/package_run_dependencies/openarm_bringup
+-- Symlinking: /root/projects/install/openarm_bringup/share/ament_index/resource_index/parent_prefix_path/openarm_bringup
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/environment/ament_prefix_path.sh
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/environment/ament_prefix_path.dsv
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/environment/path.sh
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/environment/path.dsv
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/local_setup.bash
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/local_setup.sh
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/local_setup.zsh
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/local_setup.dsv
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/package.dsv
+-- Symlinking: /root/projects/install/openarm_bringup/share/ament_index/resource_index/packages/openarm_bringup
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/cmake/openarm_bringupConfig.cmake
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/cmake/openarm_bringupConfig-version.cmake
+-- Symlinking: /root/projects/install/openarm_bringup/share/openarm_bringup/package.xml

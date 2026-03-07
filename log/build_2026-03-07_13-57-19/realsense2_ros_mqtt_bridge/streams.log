@@ -1,0 +1,10 @@
+[0.528s] Invoking command in '/root/projects/build/realsense2_ros_mqtt_bridge': PROMPT_COMMAND=history -a; history -n; PYTHONPATH=/root/projects/build/realsense2_ros_mqtt_bridge/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/projects/install/realsense2_ros_mqtt_bridge/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /root/projects/build/realsense2_ros_mqtt_bridge/build --no-deps symlink_data
+[0.650s] /usr/local/lib/python3.10/dist-packages/setuptools/_distutils/dist.py:287: UserWarning: Unknown distribution option: 'tests_require'
+[0.650s]   warnings.warn(msg)
+[0.671s] usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+[0.671s]    or: setup.py --help [cmd1 cmd2 ...]
+[0.671s]    or: setup.py --help-commands
+[0.671s]    or: setup.py cmd --help
+[0.671s] 
+[0.671s] error: option --editable not recognized
+[0.690s] Invoked command in '/root/projects/build/realsense2_ros_mqtt_bridge' returned '1': PROMPT_COMMAND=history -a; history -n; PYTHONPATH=/root/projects/build/realsense2_ros_mqtt_bridge/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/root/projects/install/realsense2_ros_mqtt_bridge/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /root/projects/build/realsense2_ros_mqtt_bridge/build --no-deps symlink_data

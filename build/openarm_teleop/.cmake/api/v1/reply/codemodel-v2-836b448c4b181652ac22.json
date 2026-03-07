@@ -1,0 +1,114 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "openarm_teleop",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bilateral_control::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bilateral_control-c1b8d2b7fbbc16cbda61.json",
+					"name" : "bilateral_control",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "comm_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-comm_test-62a170abb0bcda8f9ec9.json",
+					"name" : "comm_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gravity_comp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gravity_comp-1f09ac401884e82a535b.json",
+					"name" : "gravity_comp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "openarm_teleop_lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-openarm_teleop_lib-d894afd82e5410eff8a5.json",
+					"name" : "openarm_teleop_lib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "openarm_teleop_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-openarm_teleop_uninstall-d14217bfae2b0fc7ccfa.json",
+					"name" : "openarm_teleop_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "unilateral_control::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-unilateral_control-a9efe5597027930a8fcb.json",
+					"name" : "unilateral_control",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-e11ead78c656f77082ad.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/root/projects/build/openarm_teleop",
+		"source" : "/root/projects/ros2_ws/src/openarm_teleop"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

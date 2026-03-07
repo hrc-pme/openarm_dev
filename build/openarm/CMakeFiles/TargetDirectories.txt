@@ -1,0 +1,9 @@
+/root/projects/build/openarm/CMakeFiles/uninstall.dir
+/root/projects/build/openarm/CMakeFiles/openarm_uninstall.dir
+/root/projects/build/openarm/CMakeFiles/test.dir
+/root/projects/build/openarm/CMakeFiles/edit_cache.dir
+/root/projects/build/openarm/CMakeFiles/rebuild_cache.dir
+/root/projects/build/openarm/CMakeFiles/list_install_components.dir
+/root/projects/build/openarm/CMakeFiles/install.dir
+/root/projects/build/openarm/CMakeFiles/install/local.dir
+/root/projects/build/openarm/CMakeFiles/install/strip.dir

@@ -1,0 +1,9 @@
+/root/projects/build/openarm_bringup/CMakeFiles/uninstall.dir
+/root/projects/build/openarm_bringup/CMakeFiles/openarm_bringup_uninstall.dir
+/root/projects/build/openarm_bringup/CMakeFiles/test.dir
+/root/projects/build/openarm_bringup/CMakeFiles/edit_cache.dir
+/root/projects/build/openarm_bringup/CMakeFiles/rebuild_cache.dir
+/root/projects/build/openarm_bringup/CMakeFiles/list_install_components.dir
+/root/projects/build/openarm_bringup/CMakeFiles/install.dir
+/root/projects/build/openarm_bringup/CMakeFiles/install/local.dir
+/root/projects/build/openarm_bringup/CMakeFiles/install/strip.dir

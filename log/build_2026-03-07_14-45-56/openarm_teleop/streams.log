@@ -1,0 +1,7 @@
+[0.016s] Invoking command in '/root/projects/build/openarm_teleop': PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake --build /root/projects/build/openarm_teleop -- -j10 -l10
+[0.152s] [ 38%] Built target openarm_teleop_lib
+[0.152s] [ 53%] Built target gravity_comp
+[0.152s] [ 69%] Built target comm_test
+[0.152s] [ 84%] Built target bilateral_control
+[0.152s] [100%] Built target unilateral_control
+[0.161s] Invoked command in '/root/projects/build/openarm_teleop' returned '0': PROMPT_COMMAND=history -a; history -n; /usr/bin/cmake --build /root/projects/build/openarm_teleop -- -j10 -l10
