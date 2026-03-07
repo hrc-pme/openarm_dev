@@ -68,6 +68,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-moveit-ros-visualization \
     ros-humble-moveit-setup-assistant \
     ros-humble-ros2-controllers \
+    ros-humble-rosbridge-server \
+    ros-humble-rosbridge-suite \
     && rm -rf /var/lib/apt/lists/*
 
 # Switch to root explicitly (already default, but good practice when ARG is used)
