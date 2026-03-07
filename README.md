@@ -37,8 +37,6 @@ bash ../colcon_build.sh
 2. 自動 `source install/setup.bash` 讓依賴生效
 3. 再一次編譯其餘所有套件
 
-> 編譯完成後建議執行 `source install/setup.bash` 來確保當前終端機的環境完整載入。
-
 ---
 
 ## 🌐 3. 設定 ROS 2 Domain ID
@@ -78,6 +76,8 @@ ros2 launch openarm_bimanual_moveit_config demo.launch.py
 | `docker/docker-compose.openarm.yml` | Docker Compose 設定（Volume 掛載、GPU 等） |
 | `ros2_ws/src/` | ROS 2 工作區原始碼（openarm_ros2、realsense-ros 等） |
 
+---
+
 ### 目錄結構
 
 ```text
@@ -98,5 +98,3 @@ openarm/
 ├── README.md
 └── environment.sh
 ```
-
----
