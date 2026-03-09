@@ -32,6 +32,6 @@ services:
               capabilities: [ gpu ]
     stdin_open: true
     tty: true
-    # Working directory is set to the user home directory as requested
-    working_dir: /root
+    # Working directory is set to the openarm project folder
+    working_dir: /root/openarm
     command: /bin/bash
