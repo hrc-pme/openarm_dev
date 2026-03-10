@@ -11,6 +11,7 @@ services:
     network_mode: host
     ipc: host
     pid: host
+    privileged: true
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
@@ -21,6 +22,8 @@ services:
     volumes:
       # Mount X11 socket for GUI applications (e.g., rviz2)
       - /tmp/.X11-unix:/tmp/.X11-unix
+      # Mount hardware devices for CAN/USB access
+      - /dev:/dev
       # Mount the entire openarm folder from host to container for local development
       - ../:/root/openarm
     deploy:
