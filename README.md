@@ -58,7 +58,13 @@ source /root/openarm/environment.sh <ROS_DOMAIN_ID>
 
 ```bash
 cd /root/openarm/ros2_ws && source install/setup.bash
-ros2 launch openarm_bimanual_moveit_config demo.launch.py
+ros2 launch openarm_bringup openarm.launch.py arm_type:=v10 use_fake_hardware:=true
+```
+
+如果要控制真機則在docker內先設定can0 & can1再launch
+```bash
+sudo ip link set can0 type can bitrate 1000000 dbitrate 5000000 fd on && sudo ip link set can0 up
+sudo ip link set can1 type can bitrate 1000000 dbitrate 5000000 fd on && sudo ip link set can1 up
 ```
 
 *(圖形化介面如 rviz2 會透過 X11 顯示在本機螢幕)*
