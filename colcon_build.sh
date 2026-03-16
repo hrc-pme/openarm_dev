@@ -9,10 +9,10 @@
 cd /root/openarm/ros2_ws || { echo "錯誤：找不到 /root/openarm/ros2_ws 目錄！"; return 1 2>/dev/null || exit 1; }
 
 echo "📦 升級 Python setuptools..."
-pip install -q --upgrade setuptools
+pip install -q "setuptools<80,>=30.3.0"
 
-echo "🧹 清理 realsense 的舊編譯快取（避免 symlink / directory 衝突）..."
-rm -rf build/realsense2_camera_msgs build/realsense2_camera build/realsense2_ros_mqtt_bridge
+echo "🧹 清理全域編譯快取（因為工作區路徑從 projects 變成 openarm，舊的 CMakeCache 已經失效）..."
+rm -rf build/ install/ log/
 
 echo "🔧 步驟一：開始單獨編譯底層硬體通訊庫 (openarm_can)..."
 colcon build --packages-select openarm_can
