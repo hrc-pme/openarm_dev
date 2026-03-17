@@ -58,7 +58,7 @@ source /root/openarm/environment.sh <ROS_DOMAIN_ID>
 
 ```bash
 cd /root/openarm/ros2_ws && source install/setup.bash
-ros2 launch openarm_bringup openarm.launch.py arm_type:=v10 use_fake_hardware:=true
+ros2 launch openarm_bringup openarm.bimanual.launch.py arm_type:=v10 use_fake_hardware:=true
 ```
 
 如果要控制真機則在docker內先設定can0 & can1再launch
