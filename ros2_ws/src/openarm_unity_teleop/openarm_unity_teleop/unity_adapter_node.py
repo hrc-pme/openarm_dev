@@ -49,7 +49,13 @@ class UnityAdapterNode(Node):
         # 紀錄最後一次收到 Unity 訊號的時間與狀態
         self.last_msg_time = {'left': self.get_clock().now(), 'right': self.get_clock().now()}
         self.is_connected = {'left': False, 'right': False}
-        self.timeout_sec = 0.5 # 0.5秒沒收到代表斷線
+        self.timeout_sec = 2 # 2秒沒收到代表斷線
+        
+        # 降頻發送與低通濾波機制
+        self.last_sent_time = {'left': self.get_clock().now(), 'right': self.get_clock().now()}
+        self.min_send_interval = 0.1 # 限制最多 20Hz 發送一次，避免塞爆 controller
+        self.last_positions = {'left': None, 'right': None}
+        self.alpha = 0.15 # 低通濾波係數 (0.0 ~ 1.0)，越低越平滑但也越慢
         
         # 訂閱與發布宣告
         self.subs = {}
@@ -93,9 +99,9 @@ class UnityAdapterNode(Node):
         # 抓取並驗證收到的每個關節
         for i, name in enumerate(msg.name):
             target_j = None
-            for j_key in ['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7']:
-                if j_key in name.lower():
-                    target_j = j_key
+            for idx in range(1, 8):
+                if f'joint{idx}' in name.lower() or f'j{idx}' in name.lower():
+                    target_j = f'j{idx}'
                     break
                     
             if not target_j:
@@ -110,13 +116,25 @@ class UnityAdapterNode(Node):
             safe_positions.append(safe_pos)
             
             # 將關節名稱對應給 ros2_control 負責控制的名字
-            # 根據 openarm.bimanual.ros2_control.xacro 定義：
-            # 名稱為: openarm_left_joint1, openarm_right_joint1
             joint_names.append(f"openarm_{arm}_joint{target_j[1]}") 
+            
+        # 1. 低通濾波 (Low-pass Filter): 平滑化高頻的雜訊與突波
+        if self.last_positions[arm] is None:
+            self.last_positions[arm] = safe_positions
+        else:
+            for i in range(len(safe_positions)):
+                self.last_positions[arm][i] = self.alpha * safe_positions[i] + (1.0 - self.alpha) * self.last_positions[arm][i]
+            safe_positions = self.last_positions[arm]
 
-        # 組裝成 JointTrajectory 並送給 controller
-        if len(safe_positions) > 0:
-            self.republish_to_controller(arm, joint_names, safe_positions, duration_sec=0.1)
+        # 2. 限制發送頻率 (Rate Limiter): 避免塞爆 ros2_control 的 trajectory queue
+        now = self.get_clock().now()
+        elapsed = (now - self.last_sent_time[arm]).nanoseconds / 1e9
+        
+        if elapsed >= self.min_send_interval and len(safe_positions) > 0:
+            # 放寬預期到達時間，留有充足的空間給 Spline 插值
+            goal_time = max(0.1, elapsed * 2.0) 
+            self.republish_to_controller(arm, joint_names, safe_positions, duration_sec=goal_time)
+            self.last_sent_time[arm] = now
 
     def watchdog_check(self):
         now = self.get_clock().now()

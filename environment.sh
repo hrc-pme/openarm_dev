@@ -2,7 +2,8 @@
 
 # Always source the original ROS 2 Humble environment first
 source /opt/ros/humble/setup.bash
-echo "Sourced /opt/ros/humble/setup.bash"
+source /root/openarm/ros2_ws/install/setup.bash
+echo "Sourced /opt/ros/humble/setup.bash and /root/openarm/ros2_ws/install/setup.bash"
 
 # Check if an argument was provided for the domain ID
 if [ -z "$1" ]; then
