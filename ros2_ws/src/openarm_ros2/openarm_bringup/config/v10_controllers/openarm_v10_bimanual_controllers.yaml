@@ -30,7 +30,7 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
 
     left_gripper_controller:
-      type: position_controllers/GripperActionController
+      type: forward_command_controller/ForwardCommandController
 
     right_forward_position_controller:
       type: forward_command_controller/ForwardCommandController
@@ -42,7 +42,7 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
 
     right_gripper_controller:
-      type: position_controllers/GripperActionController
+      type: forward_command_controller/ForwardCommandController
 
 
 left_forward_position_controller:
@@ -103,7 +103,9 @@ left_joint_trajectory_controller:
 
 left_gripper_controller:
   ros__parameters:
-    joint: openarm_left_finger_joint1
+    joints: 
+    - openarm_left_finger_joint1
+    interface_name: position
     command_interfaces:
       - position
     state_interfaces:
@@ -168,7 +170,9 @@ right_joint_trajectory_controller:
 
 right_gripper_controller:
   ros__parameters:
-    joint: openarm_right_finger_joint1
+    joints: 
+    - openarm_right_finger_joint1
+    interface_name: position
     command_interfaces:
       - position
     state_interfaces:

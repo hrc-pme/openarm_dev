@@ -3,27 +3,16 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
-from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from std_msgs.msg import Header
-from builtin_interfaces.msg import Duration
+from std_msgs.msg import Float64MultiArray
 import math
 
 class UnityAdapterNode(Node):
     def __init__(self):
         super().__init__('unity_adapter_node')
-        
-        # 定義雙臂名稱
+
         self.arms = ['left', 'right']
-        
-        # OpenArm 各關節的硬體限位 (依照官方文件規格轉換為 rad)
-        # 參考圖片:
-        # J1: -80 to +200 deg
-        # J2: -100 to +100 deg
-        # J3: -90 to +90 deg
-        # J4: 0 to +140 deg
-        # J5: -90 to +90 deg
-        # J6: -45 to +45 deg
-        # J7: -90 to +90 deg
+
+        # 關節硬限位 (J1~J7 + J8夾爪)
         self.joint_limits = {
             'j1': (math.radians(-80), math.radians(200)),
             'j2': (math.radians(-100), math.radians(100)),
@@ -32,155 +21,122 @@ class UnityAdapterNode(Node):
             'j5': (math.radians(-90), math.radians(90)),
             'j6': (math.radians(-45), math.radians(45)),
             'j7': (math.radians(-90), math.radians(90)),
+            'j8': (0.0, 1.0) # 假設夾爪限位是 0 到 1.0
         }
-        
-        # 安全預設姿態 (Start Pose)
-        # 當節點啟動，或是 Watchdog 觸發安全機制時，手臂會回到此角度
-        self.start_pose = {
-            'j1': 0.0,
-            'j2': 0.0,
-            'j3': 0.0,
-            'j4': math.radians(90), # 手臂些微彎曲避免剛性伸直
-            'j5': 0.0,
-            'j6': 0.0,
-            'j7': 0.0
-        }
-        
-        # 紀錄最後一次收到 Unity 訊號的時間與狀態
-        self.last_msg_time = {'left': self.get_clock().now(), 'right': self.get_clock().now()}
+
+        # Start Pose (長度改為 8，最後一個是夾爪)
+        self.start_pose = [0.0, 0.0, 0.0, math.radians(90), 0.0, 0.0, 0.0, 0.0]
+
+        # 狀態管理
         self.is_connected = {'left': False, 'right': False}
-        self.timeout_sec = 2 # 2秒沒收到代表斷線
-        
-        # 降頻發送與低通濾波機制
-        self.last_sent_time = {'left': self.get_clock().now(), 'right': self.get_clock().now()}
-        self.min_send_interval = 0.1 # 限制最多 20Hz 發送一次，避免塞爆 controller
-        self.last_positions = {'left': None, 'right': None}
-        self.alpha = 0.15 # 低通濾波係數 (0.0 ~ 1.0)，越低越平滑但也越慢
-        
-        # 訂閱與發布宣告
+        self.last_msg_time = {arm: self.get_clock().now() for arm in self.arms}
+        self.timeout_sec = 2.0
+
+        # 位置紀錄 (長度皆改為 8)
+        self.current_positions = {arm: list(self.start_pose) for arm in self.arms}
+        self.target_positions = {arm: list(self.start_pose) for arm in self.arms}
+
+        self.max_vel_teleop = 2.5
+        self.max_vel_failsafe = 0.5
+        self.alpha = 0.3 
+
         self.subs = {}
         self.pubs = {}
-        
-        for arm in self.arms:
-            # 1. 訂閱來自 Unity ROS# 的軌跡資料
-            self.subs[arm] = self.create_subscription(
-                JointState,
-                f'/{arm}_joint_states/vr_control',
-                lambda msg, arm_name=arm: self.vr_command_callback(msg, arm_name),
-                10
-            )
-            
-            # 2. 轉發給 Follower ros2_control
-            self.pubs[arm] = self.create_publisher(
-                JointTrajectory,
-                f'/{arm}_joint_trajectory_controller/joint_trajectory',
-                10
-            )
-            
-            # 第一個動作：送出 Start Pose 給機器人確保安全
-            self.send_start_pose(arm)
+        self.gripper_pubs = {}
 
-        # 3. Watchdog Timer：定期檢查 Unity 是不是斷線了
-        self.watchdog_timer = self.create_timer(0.1, self.watchdog_check)
-        
-        self.get_logger().info("🔥 Unity Adapter Node 已經啟動！雙臂處於 Start Pose。")
+        for arm in self.arms:
+            # 1. 接收手臂+夾爪數據
+            self.subs[arm] = self.create_subscription(
+                JointState, f'/{arm}_joint_states/vr_control',
+                lambda msg, a=arm: self.vr_command_callback(msg, a), 10)
+
+            # 2. 發布給手臂控制器
+            self.pubs[arm] = self.create_publisher(
+                Float64MultiArray, f'/{arm}_forward_position_controller/commands', 10)
+            
+            # 3. 發布給夾爪控制器 (對應你的 YAML 名稱)
+            self.gripper_pubs[arm] = self.create_publisher(
+                Float64MultiArray, f'/{arm}_gripper_controller/commands', 10)
+
+        self.last_loop_time = self.get_clock().now()
+        self.control_timer = self.create_timer(0.02, self.control_loop)
+
+        self.get_logger().info("🔥 Unity Adapter 已修復！支援手臂+夾爪雙控。")
 
     def vr_command_callback(self, msg: JointState, arm: str):
-        # 收到 Unity 的封包，更新 watchdog 時間
         self.last_msg_time[arm] = self.get_clock().now()
-        
         if not self.is_connected[arm]:
-            self.get_logger().info(f"✅ {arm.capitalize()} 臂已連接到 Unity VR 控制！")
             self.is_connected[arm] = True
-            
-        safe_positions = []
-        joint_names = []
-        
-        # 抓取並驗證收到的每個關節
+
+        new_target = list(self.target_positions[arm])
+        valid_count = 0
+
+        # --- 修正後的邏輯：必須在 callback 內處理 msg ---
         for i, name in enumerate(msg.name):
-            target_j = None
+            name_lower = name.lower()
+            target_idx = -1
+            
+            # 匹配手臂 J1~J7
             for idx in range(1, 8):
-                if f'joint{idx}' in name.lower() or f'j{idx}' in name.lower():
-                    target_j = f'j{idx}'
+                if f'joint{idx}' in name_lower or f'j{idx}' in name_lower or f'link{idx}' in name_lower:
+                    target_idx = idx - 1
                     break
-                    
-            if not target_j:
-                continue
-                
-            raw_pos = msg.position[i]
             
-            # 執行 Safety Clamp (硬限制)
-            min_lim, max_lim = self.joint_limits[target_j]
-            safe_pos = max(min_lim, min(raw_pos, max_lim))
+            # 匹配夾爪 (finger)
+            if 'finger' in name_lower:
+                target_idx = 7 # 放入第 8 個位置
             
-            safe_positions.append(safe_pos)
-            
-            # 將關節名稱對應給 ros2_control 負責控制的名字
-            joint_names.append(f"openarm_{arm}_joint{target_j[1]}") 
-            
-        # 1. 低通濾波 (Low-pass Filter): 平滑化高頻的雜訊與突波
-        if self.last_positions[arm] is None:
-            self.last_positions[arm] = safe_positions
-        else:
-            for i in range(len(safe_positions)):
-                self.last_positions[arm][i] = self.alpha * safe_positions[i] + (1.0 - self.alpha) * self.last_positions[arm][i]
-            safe_positions = self.last_positions[arm]
+            if target_idx != -1:
+                raw_pos = msg.position[i]
+                # 取得對應限位
+                limit_key = f'j{target_idx + 1}'
+                min_lim, max_lim = self.joint_limits.get(limit_key, (-3.14, 3.14))
+                new_target[target_idx] = max(min_lim, min(raw_pos, max_lim))
+                valid_count += 1
 
-        # 2. 限制發送頻率 (Rate Limiter): 避免塞爆 ros2_control 的 trajectory queue
-        now = self.get_clock().now()
-        elapsed = (now - self.last_sent_time[arm]).nanoseconds / 1e9
-        
-        if elapsed >= self.min_send_interval and len(safe_positions) > 0:
-            # 放寬預期到達時間，留有充足的空間給 Spline 插值
-            goal_time = max(0.1, elapsed * 2.0) 
-            self.republish_to_controller(arm, joint_names, safe_positions, duration_sec=goal_time)
-            self.last_sent_time[arm] = now
+        if valid_count > 0:
+            self.target_positions[arm] = new_target
 
-    def watchdog_check(self):
+    def control_loop(self):
         now = self.get_clock().now()
+        dt = (now - self.last_loop_time).nanoseconds / 1e9
+        self.last_loop_time = now
+
         for arm in self.arms:
-            if self.is_connected[arm]:
-                elapsed = (now - self.last_msg_time[arm]).nanoseconds / 1e9
-                if elapsed > self.timeout_sec:
-                    self.get_logger().error(f"🚨 {arm.capitalize()} 臂失去 Unity 連線 ({elapsed:.1f}s)！觸發 Fail-safe 返回 Start Pose。")
-                    self.is_connected[arm] = False
-                    self.send_start_pose(arm)
+            elapsed_vr = (now - self.last_msg_time[arm]).nanoseconds / 1e9
+            if self.is_connected[arm] and elapsed_vr > self.timeout_sec:
+                self.is_connected[arm] = False
+                self.target_positions[arm] = list(self.start_pose)
 
-    def send_start_pose(self, arm: str):
-        # 將機器人拉回預設站姿，名稱必須與 URDF (xacro) 完全吻合
-        joint_names = [f"openarm_{arm}_joint1", f"openarm_{arm}_joint2", f"openarm_{arm}_joint3", f"openarm_{arm}_joint4", f"openarm_{arm}_joint5", f"openarm_{arm}_joint6", f"openarm_{arm}_joint7"]
-        positions = [self.start_pose['j1'], self.start_pose['j2'], self.start_pose['j3'], self.start_pose['j4'], self.start_pose['j5'], self.start_pose['j6'], self.start_pose['j7']]
-        
-        # 啟動或斷線回原本位置時，動作放慢 (3秒) 以測安全
-        self.republish_to_controller(arm, joint_names, positions, duration_sec=3.0)
-        self.get_logger().info(f"🔄 發送 {arm.capitalize()} 臂 Start Pose 指令...")
+            max_step = (self.max_vel_teleop if self.is_connected[arm] else self.max_vel_failsafe) * dt
 
-    def republish_to_controller(self, arm: str, joint_names: list, positions: list, duration_sec: float):
-        traj_msg = JointTrajectory()
-        traj_msg.header = Header()
-        traj_msg.header.stamp = self.get_clock().now().to_msg()
-        traj_msg.joint_names = joint_names
-        
-        point = JointTrajectoryPoint()
-        point.positions = [float(p) for p in positions]
-        
-        # 告訴 ros2_control 這個目標要多久到達
-        sec = int(duration_sec)
-        nanosec = int((duration_sec - sec) * 1e9)
-        point.time_from_start = Duration(sec=sec, nanosec=nanosec)
-        
-        traj_msg.points.append(point)
-        # 因為是連續目標，可以發送 publisher
-        self.pubs[arm].publish(traj_msg)
+            temp_full_pos = []
+            for i in range(8): # 遍歷 8 個關節
+                target = self.target_positions[arm][i]
+                current = self.current_positions[arm][i]
+                
+                smoothed = self.alpha * target + (1.0 - self.alpha) * current if self.is_connected[arm] else target
+                diff = smoothed - current
+                step = max(-max_step, min(diff, max_step))
+                temp_full_pos.append(current + step)
+
+            self.current_positions[arm] = temp_full_pos
+
+            # --- 分流發送 ---
+            # 1. 發送前 7 個給手臂
+            arm_msg = Float64MultiArray(data=temp_full_pos[:7])
+            self.pubs[arm].publish(arm_msg)
+
+            # 2. 發送第 8 個給夾爪 (格式為 [pos])
+            gripper_msg = Float64MultiArray(data=[temp_full_pos[7]])
+            self.gripper_pubs[arm].publish(gripper_msg)
 
 def main(args=None):
     rclpy.init(args=args)
     node = UnityAdapterNode()
-    
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
-        node.get_logger().info("程式被手動終止。")
+    except KeyboardInterrupt: pass
     finally:
         node.destroy_node()
         rclpy.shutdown()

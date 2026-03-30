@@ -17,8 +17,8 @@ services:
       - QT_X11_NO_MITSHM=1
       - TZ=Asia/Taipei
       # NVIDIA GPU Configuration
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       # Mount X11 socket for GUI applications (e.g., rviz2)
       - /tmp/.X11-unix:/tmp/.X11-unix
@@ -26,13 +26,13 @@ services:
       - /dev:/dev
       # Mount the entire openarm folder from host to container for local development
       - ../:/root/openarm
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [ gpu ]
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: all
+    #          capabilities: [ gpu ]
     stdin_open: true
     tty: true
     # Working directory is set to the openarm project folder

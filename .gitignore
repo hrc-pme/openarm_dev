@@ -1,30 +1,9 @@
-# ROS 2 Build files
 build/
 install/
 log/
-
 ros2_ws/build/
 ros2_ws/install/
 ros2_ws/log/
-
-# IDE files
-.vscode/
-
-# Python cache files
+*.pyc
 __pycache__/
-*.py[cod]
-*$py.class
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# dev record files
-question_asked.md
-To-Do-List.md
-current_state.md
+.vscode/

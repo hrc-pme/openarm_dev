@@ -29,8 +29,8 @@ ARG USERNAME=root
 # (e.g., cu118, cu121, or remove it for CPU-only).
 RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN python3 -m pip install --no-cache-dir numpy
-RUN python3 -m pip install --no-cache-dir --ignore-installed --index-url https://download.pytorch.org/whl/cu128 \
-    torch torchvision torchaudio
+# RUN python3 -m pip install --no-cache-dir --ignore-installed --index-url https://download.pytorch.org/whl/cu128 \
+#     torch torchvision torchaudio
 
 # ---- Intel RealSense SDK 2.0 (librealsense2) - Built from source ----
 # We build from source to get version 2.56.1 which matches realsense-ros branch r/4.56.1.

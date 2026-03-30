@@ -13,29 +13,29 @@
 # limitations under the License.
 
 joint1:
-  kp: 70.0
-  kd: 2.75
+  kp: 50.0
+  kd: 3.5
 
 joint2:
-  kp: 70.0
-  kd: 2.5
+  kp: 50.0
+  kd: 3.5
 
 joint3:
-  kp: 70.0
-  kd: 2.0
+  kp: 50.0
+  kd: 3.0
 
 joint4:
-  kp: 60.0
-  kd: 2.0
+  kp: 40.0
+  kd: 3.0
 
 joint5:
-  kp: 10.0
-  kd: 0.7
+  kp: 7.0
+  kd: 1.2
 
 joint6:
-  kp: 10.0
-  kd: 0.6
+  kp: 7.0
+  kd: 1.0
 
 joint7:
-  kp: 10.0
-  kd: 0.5
+  kp: 7.0
+  kd: 0.8
