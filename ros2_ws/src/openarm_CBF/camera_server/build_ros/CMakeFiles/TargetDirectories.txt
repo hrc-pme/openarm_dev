@@ -1,0 +1,10 @@
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/uninstall.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/canera_server_uninstall.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/koch_vamp_server.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/test.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/edit_cache.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/rebuild_cache.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/list_install_components.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/install.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/install/local.dir
+/root/openarm/ros2_ws/src/openarm_CBF/camera_server/build_ros/CMakeFiles/install/strip.dir

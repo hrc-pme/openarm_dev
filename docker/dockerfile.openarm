@@ -29,6 +29,7 @@ ARG USERNAME=root
 # (e.g., cu118, cu121, or remove it for CPU-only).
 RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN python3 -m pip install --no-cache-dir numpy
+RUN python3 -m pip install --no-cache-dir pybullet
 # RUN python3 -m pip install --no-cache-dir --ignore-installed --index-url https://download.pytorch.org/whl/cu128 \
 #     torch torchvision torchaudio
 
