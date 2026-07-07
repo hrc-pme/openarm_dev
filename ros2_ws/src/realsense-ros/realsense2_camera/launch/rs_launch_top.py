@@ -12,7 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Launch realsense2_camera node."""
+"""
+Launch realsense2_camera node for the TOP camera.
+
+This launch file is specifically configured for the camera with serial number '319522065801',
+and names it 'camera1'. The C++ point cloud server is configured to listen to this camera.
+"""
+
 import os
 import yaml
 from launch import LaunchDescription
