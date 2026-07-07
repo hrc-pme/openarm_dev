@@ -31,12 +31,6 @@ cd /root/openarm/ros2_ws
 bash ../colcon_build.sh
 ```
 
-**⚠️ 為什麼不能直接 `colcon build`？**
-`openarm_teleop` 依賴 `openarm_can`，但 colcon 預設的平行編譯會導致 `openarm_can` 還沒編譯完前就已經找不到 `OpenArmCAN` 的問題。這個腳本會：
-1. 先單獨編譯 `openarm_can`
-2. 自動 `source install/setup.bash` 讓依賴生效
-3. 再一次編譯其餘所有套件
-
 ---
 
 ## 🌐 3. 設定 ROS 2 Domain ID
