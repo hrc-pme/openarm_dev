@@ -22,6 +22,7 @@ class UnityAdapterNode(Node):
         self.arms = ['left', 'right']
 
         self.declare_parameter('vr_timeout_sec', 2.0)
+        self.declare_parameter('teleop_signal_timeout_sec', 0.5)
         self.declare_parameter('max_arm_velocity', 1.20)
         self.declare_parameter('max_arm_acceleration', 0.70)
         self.declare_parameter('max_gripper_velocity', 0.10)
@@ -32,7 +33,10 @@ class UnityAdapterNode(Node):
         self.declare_parameter('gripper_input_normalized', False)
         self.declare_parameter('startup_max_arm_velocity', 0.20)
         self.declare_parameter('startup_max_arm_acceleration', 0.40)
-        self.declare_parameter('startup_stage_tolerance', 0.04)
+        # 實機在 J1/J4/J7 可有約 0.06–0.085 rad 的穩態追蹤誤差。
+        self.declare_parameter('startup_stage_tolerance', 0.10)
+        # 可單獨調整第一階段的 J4 容差；預設與其他 Ready 關節相同。
+        self.declare_parameter('startup_retreat_j4_tolerance', 0.10)
         self.declare_parameter('startup_stage_timeout_sec', 30.0)
         self.declare_parameter('startup_settle_time_sec', 0.5)
         self.declare_parameter('joint_state_timeout_sec', 1.0)
@@ -56,9 +60,11 @@ class UnityAdapterNode(Node):
             0.1, float(self.get_parameter('vr_timeout_sec').value))
         self.last_joint_state_time = {arm: None for arm in self.arms}
         self.vr_blocked_warning_sent = {arm: False for arm in self.arms}
-        # 預設啟用以相容於現有 Unity；Unity 可透過
-        # /unity_adapter/teleop_enable 立即暫停或重新啟用 VR 控制。
-        self.teleop_enabled = True
+        # 必須先收到 Unity 持續發出的按住訊號，才允許自動或 VR 動作。
+        self.teleop_enabled = False
+        self.last_teleop_signal_time = None
+        self.teleop_signal_timeout_sec = max(
+            0.1, float(self.get_parameter('teleop_signal_timeout_sec').value))
 
         # 在收到完整 /joint_states 前，不會發布任何控制命令。
         self.is_initialized = {arm: False for arm in self.arms}
@@ -87,6 +93,9 @@ class UnityAdapterNode(Node):
             0.01, float(self.get_parameter('startup_max_arm_acceleration').value))
         self.startup_stage_tolerance = max(
             0.005, float(self.get_parameter('startup_stage_tolerance').value))
+        self.startup_retreat_j4_tolerance = max(
+            self.startup_stage_tolerance,
+            float(self.get_parameter('startup_retreat_j4_tolerance').value))
         self.startup_stage_timeout_sec = max(
             1.0, float(self.get_parameter('startup_stage_timeout_sec').value))
         self.startup_settle_time_sec = max(
@@ -138,9 +147,14 @@ class UnityAdapterNode(Node):
         self.control_timer = self.create_timer(self.CONTROL_PERIOD_SEC, self.control_loop)
 
         self.get_logger().info(
-            'Unity Adapter 已啟動；收到雙臂 /joint_states 後將自動進入 80 度 Ready pose。')
+            'Unity Adapter 已啟動；按住左手拇指與中指後才會進入 Ready pose。')
+        self.get_logger().info(
+            f'Ready 容差：一般={self.startup_stage_tolerance:.3f} rad，'
+            f'後抬 J4={self.startup_retreat_j4_tolerance:.3f} rad。')
 
     def _start_ready_sequence(self, now):
+        if not self.teleop_enabled:
+            return False
         if self.ready_sequence_started or self.ready_sequence_active:
             return False
         if not all(self.is_initialized.values()):
@@ -207,8 +221,13 @@ class UnityAdapterNode(Node):
         self.get_logger().error(
             f'Ready sequence 已停止並保持實際姿態：{reason}')
 
+    def _ready_joint_tolerance(self, joint_index):
+        if self.ready_stage_index == 0 and joint_index == 3:
+            return self.startup_retreat_j4_tolerance
+        return self.startup_stage_tolerance
+
     def _ready_stage_error_summary(self):
-        """回報目前階段左右手誤差最大的關節。"""
+        """回報目前階段所有未達標的關節與各自容差。"""
         if (
             self.ready_stage_index < 0
             or self.ready_stage_index >= len(self.ready_stage_names)
@@ -218,21 +237,22 @@ class UnityAdapterNode(Node):
         summaries = []
         for arm in self.arms:
             waypoint = self.ready_waypoints[arm][self.ready_stage_index]
-            joint_index = max(
-                range(self.ARM_JOINT_COUNT),
-                key=lambda index: abs(
-                    self.actual_positions[arm][index] - waypoint[index]),
-            )
-            actual = self.actual_positions[arm][joint_index]
-            target = waypoint[joint_index]
-            error = actual - target
-            summaries.append(
-                f'{arm} J{joint_index + 1}: actual={actual:.3f}, '
-                f'target={target:.3f}, error={error:+.3f} rad')
-        return '; '.join(summaries)
+            for joint_index in range(self.ARM_JOINT_COUNT):
+                actual = self.actual_positions[arm][joint_index]
+                target = waypoint[joint_index]
+                error = actual - target
+                tolerance = self._ready_joint_tolerance(joint_index)
+                if abs(error) > tolerance:
+                    summaries.append(
+                        f'{arm} J{joint_index + 1}: actual={actual:.3f}, '
+                        f'target={target:.3f}, error={error:+.3f}, '
+                        f'tolerance={tolerance:.3f} rad')
+        return '; '.join(summaries) or (
+            '所有關節目前在容差內，但未持續達標 '
+            f'{self.startup_settle_time_sec:.2f} 秒')
 
     def _update_ready_sequence(self, now):
-        if not self.ready_sequence_active:
+        if not self.ready_sequence_active or not self.teleop_enabled:
             return
 
         stage_elapsed = (
@@ -250,7 +270,7 @@ class UnityAdapterNode(Node):
             abs(
                 self.actual_positions[arm][joint_index]
                 - self.ready_waypoints[arm][self.ready_stage_index][joint_index]
-            ) <= self.startup_stage_tolerance
+            ) <= self._ready_joint_tolerance(joint_index)
             for arm in self.arms
             for joint_index in range(self.ARM_JOINT_COUNT)
         )
@@ -329,14 +349,20 @@ class UnityAdapterNode(Node):
             # _hold_actual_position() 當下擷取的姿態，不能跟著重力下沉。
 
         if (
-            not self.ready_sequence_started
+            self.teleop_enabled
+            and not self.ready_sequence_started
             and all(self.is_initialized.values())
             and self._joint_states_are_fresh(now)
         ):
             self._start_ready_sequence(now)
 
     def teleop_enable_callback(self, msg: Bool):
+        now = self.get_clock().now()
+        self.last_teleop_signal_time = now
         enabled = bool(msg.data)
+        self._set_teleop_enabled(enabled, now)
+
+    def _set_teleop_enabled(self, enabled: bool, now):
         if enabled == self.teleop_enabled:
             return
 
@@ -346,22 +372,31 @@ class UnityAdapterNode(Node):
             self.vr_blocked_warning_sent[arm] = False
 
         if not enabled:
-            if self.ready_sequence_active:
-                self._abort_ready_sequence('Unity 已停用 VR 控制')
-            else:
-                for arm in self.arms:
-                    if self.is_initialized[arm]:
-                        self._hold_actual_position(arm)
-                self.get_logger().warning(
-                    'Unity 已停用 VR 控制；雙臂已鎖定當下實際姿態。')
+            for arm in self.arms:
+                if self.is_initialized[arm]:
+                    self._hold_commanded_position(arm)
+            self.get_logger().warning(
+                '左手捏合已放開；雙臂保持最後送出的關節命令。')
             return
 
-        if self.ready_for_vr:
+        if self.ready_sequence_active:
+            # 暫停期間不累計 Ready 階段逾時，重新按住後繼續原階段。
+            self.ready_stage_started = now
+            self.ready_stage_reached_since = None
+            for arm in self.arms:
+                self.target_positions[arm] = list(
+                    self.ready_waypoints[arm][self.ready_stage_index])
+                self.command_velocities[arm] = [0.0] * self.COMMAND_COUNT
+            self.get_logger().info('左手捏合已恢復；繼續 Ready sequence。')
+        elif not self.ready_sequence_started:
+            if all(self.is_initialized.values()) and self._joint_states_are_fresh(now):
+                self._start_ready_sequence(now)
+        elif self.ready_for_vr:
             self.get_logger().info(
                 'Unity 已重新啟用 VR 控制；將恢復絕對關節角度對應。')
-        elif self.ready_sequence_started:
+        else:
             self.get_logger().warning(
-                'VR 控制已啟用，但 Ready sequence 曾中止；'
+                'VR 控制已啟用，但 Ready sequence 曾因錯誤中止；'
                 '請檢查現場後重新啟動 adapter。')
 
     @staticmethod
@@ -473,8 +508,20 @@ class UnityAdapterNode(Node):
         self.target_positions[arm] = list(measured)
         self.command_velocities[arm] = [0.0] * self.COMMAND_COUNT
 
+    def _hold_commanded_position(self, arm: str):
+        # 放開手勢時保持上一筆已發布的目標，避免量測追蹤誤差
+        # 將命令位置瞬間改到較低的實際位置。
+        self.target_positions[arm] = list(self.current_positions[arm])
+        self.command_velocities[arm] = [0.0] * self.COMMAND_COUNT
+
     def control_loop(self):
         now = self.get_clock().now()
+        if self.teleop_enabled and (
+            self.last_teleop_signal_time is None or
+            (now - self.last_teleop_signal_time).nanoseconds / 1e9
+            > self.teleop_signal_timeout_sec
+        ):
+            self._set_teleop_enabled(False, now)
         dt = (now - self.last_loop_time).nanoseconds / 1e9
         self.last_loop_time = now
         if dt <= 0.0:
